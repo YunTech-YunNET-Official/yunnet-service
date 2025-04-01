@@ -1,0 +1,89 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String    @db.VarChar(50)
+  account   String    @unique @db.VarChar(50)
+  password  String
+  email     String    @unique
+  isActive  Boolean   @default(true)
+  expiresAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  // 建立與 UserGroup 的一對多關係
+  userGroups         UserGroup[]
+  ResetPasswordToken ResetPasswordToken[]
+}
+
+model ResetPasswordToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiredAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 與 User 的關聯
+  user User @relation(fields: [userId], references: [id])
+}
+
+model Group {
+  id        String   @id @default(cuid())
+  key       String   @unique @db.VarChar(20)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 建立與 UserGroup 的一對多關係
+  userGroups       UserGroup[]
+  // 建立與 GroupPermission 的一對多關係
+  groupPermissions GroupPermission[]
+}
+
+model UserGroup {
+  id        String    @id @default(cuid())
+  userId    String
+  groupId   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  expiresAt DateTime?
+
+  // 與 User 的關聯
+  user  User  @relation(fields: [userId], references: [id])
+  // 與 Group 的關聯
+  group Group @relation(fields: [groupId], references: [id])
+}
+
+model Permission {
+  id        String   @id @default(cuid())
+  key       String   @unique @db.VarChar(20)
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 建立與 GroupPermission 的一對多關係
+  groupPermissions GroupPermission[]
+}
+
+model GroupPermission {
+  id           String    @id @default(cuid())
+  groupId      String
+  permissionId String
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  expiresAt    DateTime?
+
+  // 與 Group 的關聯
+  group      Group      @relation(fields: [groupId], references: [id])
+  // 與 Permission 的關聯
+  permission Permission @relation(fields: [permissionId], references: [id])
+}
