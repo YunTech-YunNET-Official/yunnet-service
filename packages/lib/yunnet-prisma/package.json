@@ -1,0 +1,21 @@
+{
+  "name": "@yunnet-shared-libs/yunnet-prisma",
+  "version": "0.1.0",
+  "description": "YunNET Prisma",
+  "license": "Unlicense",
+  "main": "src/index.ts",
+  "private": true,
+  "prisma": {
+    "schema": "./src/prisma/schema.prisma"
+  },
+  "scripts": {
+    "db:dev": "pnpify prisma migrate dev",
+    "db:deploy": "pnpify prisma migrate deploy",
+    "db:generate": "pnpify prisma generate"
+  },
+  "dependencies": {
+    "@prisma/client": "6.5.0",
+    "@yarnpkg/pnpify": "^4.1.4",
+    "prisma": "^6.5.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "name": "yunnet-service",
+  "packageManager": "yarn@4.8.1",
+  "scripts": {
+    "auth-client": "yarn workspace sso-auth-client",
+    "auth-server": "yarn workspace sso-auth-server",
+    "yunnet-admin-server": "yarn workspace yunnet-admin-server",
+    "yunnet-admin-client": "yarn workspace yunnet-admin-client",
+    "yunnet-app-server": "yarn workspace yunnet-app-server",
+    "yunnet-app-client": "yarn workspace yunnet-app-client",
+    "yunnet-prisma": "yarn workspace @yunnet-shared-libs/yunnet-prisma"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/lib/*"
+  ],
+  "dependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@yunnet-shared-libs/yunnet-prisma": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}
