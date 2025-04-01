@@ -7,7 +7,8 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, synchronize, reopened, ready_for_review]
+      
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
 
 # cancel running jobs of the same PR
 concurrency:
@@ -15,10 +16,8 @@ concurrency:
   cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
 
 jobs:
-  # test-and-scan:
-  #   secrets: inherit
-  #   uses: ./.github/workflows/test-and-scan.yml
-
   build-container:
+    # 只有當 PR Label 裡面包含 'build-code' 時，才執行
+    if: contains( toJson(github.event.pull_request.labels), 'build-code')
     secrets: inherit
     uses: ./.github/workflows/build-container.yml
